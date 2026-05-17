@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import AutoSuggestInput from '../components/AutoSuggestInput';
+
+const JOB_ROLES = ['Design', 'Engineering', 'Data Science', 'Product', 'Marketing', 'Remote'];
+const JOB_LOCATIONS = ['San Francisco, CA', 'New York, NY', 'Austin, TX', 'London, UK', 'Remote'];
 
 export default function Home({ onNavigate, onOpenAuth, onSearchJobs }) {
   const { user, toggleSaveJob } = useAuth();
@@ -63,21 +67,24 @@ export default function Home({ onNavigate, onOpenAuth, onSearchJobs }) {
           <p>Connect with top companies hiring across tech, design, marketing, and more. Your next opportunity is one search away.</p>
           
           <div className="hero-search">
-            <input 
-              type="text" 
+            <AutoSuggestInput 
               placeholder="Job title, skill, or company..." 
               id="hero-search-input"
               value={searchVal}
               onChange={e => setSearchVal(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSearchSubmit()}
+              suggestionsList={JOB_ROLES}
+              style={{ flex: 1 }}
+              inputStyle={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: "'DM Sans', sans-serif", fontSize: '.95rem', padding: '8px 12px', width: '100%' }}
             />
-            <input 
-              type="text" 
+            <AutoSuggestInput 
               placeholder="Location or Remote" 
-              style={{ flex: 0.6, borderLeft: '1px solid var(--border2)' }}
               value={locVal}
               onChange={e => setLocVal(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSearchSubmit()}
+              suggestionsList={JOB_LOCATIONS}
+              style={{ flex: 0.6 }}
+              inputStyle={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: "'DM Sans', sans-serif", fontSize: '.95rem', padding: '8px 12px', borderLeft: '1px solid var(--border2)', width: '100%' }}
             />
             <button className="btn btn-primary" onClick={handleSearchSubmit}>Search Jobs</button>
           </div>

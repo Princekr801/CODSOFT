@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import AutoSuggestInput from '../components/AutoSuggestInput';
+
+const JOB_ROLES = ['Design', 'Engineering', 'Data Science', 'Product', 'Marketing', 'Remote'];
+const JOB_LOCATIONS = ['San Francisco, CA', 'New York, NY', 'Austin, TX', 'London, UK', 'Remote'];
 
 export default function Listings({ initialSearch, initialLocation, onNavigate, clearSearchQueries }) {
   // Search parameters
   const [searchVal, setSearchVal] = useState(initialSearch || '');
+  const [locVal, setLocVal] = useState(initialLocation || '');
   const [sortVal, setSortVal] = useState('Newest First');
   
   // Filter checkboxes
@@ -44,7 +49,7 @@ export default function Listings({ initialSearch, initialLocation, onNavigate, c
       // 1. Build Query Parameters
       const params = new URLSearchParams();
       if (searchVal) params.append('search', searchVal);
-      if (initialLocation) params.append('location', initialLocation);
+      if (locVal) params.append('location', locVal);
       
       // Types filter
       const activeTypes = Object.keys(jobTypes).filter(k => jobTypes[k]).join(',');
@@ -196,12 +201,23 @@ export default function Listings({ initialSearch, initialLocation, onNavigate, c
             </span>
             
             <div className="search-box">
-              <input 
-                type="text" 
+              <AutoSuggestInput 
                 placeholder="Search jobs..."
                 value={searchVal}
                 onChange={e => setSearchVal(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && fetchJobs()}
+                suggestionsList={JOB_ROLES}
+                style={{ flex: 1 }}
+                inputStyle={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: "'DM Sans', sans-serif", fontSize: '.88rem', padding: '6px 10px', width: '100%' }}
+              />
+              <AutoSuggestInput 
+                placeholder="Location..."
+                value={locVal}
+                onChange={e => setLocVal(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && fetchJobs()}
+                suggestionsList={JOB_LOCATIONS}
+                style={{ flex: 0.6 }}
+                inputStyle={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: 'var(--text)', fontFamily: "'DM Sans', sans-serif", fontSize: '.88rem', padding: '6px 10px', borderLeft: '1px solid var(--border2)', width: '100%' }}
               />
               <button className="search-btn" onClick={fetchJobs}>Search</button>
             </div>
