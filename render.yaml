@@ -2,6 +2,7 @@ services:
   - type: web
     name: talenthub-job-board
     env: node
+    plan: free
     rootDir: job-board
     buildCommand: npm install && npm run build --prefix frontend
     startCommand: npm start --prefix backend
