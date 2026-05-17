@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: talenthub-job-board
+    env: node
+    buildCommand: npm install && npm run build --prefix frontend
+    startCommand: npm start --prefix backend
+    envVars:
+      - key: NODE_ENV
+        value: production

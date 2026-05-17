@@ -30,7 +30,7 @@ export default function EmployerDashboard({ onNavigate }) {
     setLoading(true);
     try {
       // Get all jobs to filter employer's jobs
-      const jobsRes = await fetch('http://localhost:5000/api/jobs');
+      const jobsRes = await fetch('/api/jobs');
       if (jobsRes.ok) {
         const allJobs = await jobsRes.json();
         const filteredJobs = allJobs.filter(j => j.employerId === (user.id || user._id));
@@ -38,7 +38,7 @@ export default function EmployerDashboard({ onNavigate }) {
       }
 
       // Get applications for this employer's jobs
-      const appsRes = await fetch('http://localhost:5000/api/applications', {
+      const appsRes = await fetch('/api/applications', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (appsRes.ok) {
@@ -72,7 +72,7 @@ export default function EmployerDashboard({ onNavigate }) {
       const salaryRange = `$${parseInt(minSalary, 10) / 1000}k–$${parseInt(maxSalary, 10) / 1000}k`;
       const mappedExp = experience.includes('Entry') ? 'Entry' : experience.includes('Mid') ? 'Mid' : experience.includes('Senior') ? 'Senior' : 'Lead';
 
-      const res = await fetch('http://localhost:5000/api/jobs', {
+      const res = await fetch('/api/jobs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ export default function EmployerDashboard({ onNavigate }) {
 
   const handleStatusChange = async (appId, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/applications/${appId}`, {
+      const res = await fetch(`/api/applications/${appId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

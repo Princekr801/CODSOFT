@@ -36,7 +36,7 @@ export default function CandidateDashboard({ onNavigate }) {
     setLoadingApps(true);
     try {
       // Fetch Applications
-      const appRes = await fetch('http://localhost:5000/api/applications', {
+      const appRes = await fetch('/api/applications', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (appRes.ok) {
@@ -45,7 +45,7 @@ export default function CandidateDashboard({ onNavigate }) {
       }
 
       // Fetch Notifications
-      const notifyRes = await fetch('http://localhost:5000/api/notifications', {
+      const notifyRes = await fetch('/api/notifications', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (notifyRes.ok) {
@@ -73,7 +73,7 @@ export default function CandidateDashboard({ onNavigate }) {
       
       setLoadingSaved(true);
       try {
-        const res = await fetch('http://localhost:5000/api/jobs');
+        const res = await fetch('/api/jobs');
         if (res.ok) {
           const allJobs = await res.json();
           // Filter matching saved job IDs

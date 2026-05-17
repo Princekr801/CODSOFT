@@ -35,7 +35,7 @@ export default function Apply({ jobId, onNavigate }) {
     const fetchBrief = async () => {
       setLoadingJob(true);
       try {
-        const res = await fetch(`http://localhost:5000/api/jobs/${jobId}`);
+        const res = await fetch(`/api/jobs/${jobId}`);
         if (res.ok) {
           const data = await res.json();
           setJob(data);
@@ -60,7 +60,7 @@ export default function Apply({ jobId, onNavigate }) {
     setIsSubmitting(true);
     
     try {
-      const res = await fetch('http://localhost:5000/api/applications', {
+      const res = await fetch('/api/applications', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -14,7 +14,7 @@ export default function Home({ onNavigate, onOpenAuth, onSearchJobs }) {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/jobs');
+        const res = await fetch('/api/jobs');
         if (res.ok) {
           const data = await res.json();
           // Display first 6 jobs as featured listings

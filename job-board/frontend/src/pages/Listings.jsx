@@ -67,7 +67,7 @@ export default function Listings({ initialSearch, initialLocation, onNavigate, c
       // Salary slider
       params.append('salaryMin', salaryMin);
 
-      const res = await fetch(`http://localhost:5000/api/jobs?${params.toString()}`);
+      const res = await fetch(`/api/jobs?${params.toString()}`);
       if (res.ok) {
         let data = await res.json();
         

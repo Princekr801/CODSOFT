@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { connectDB } from './config/dbStore.js';
 
 // Load routes
@@ -31,13 +33,24 @@ app.use('/api/jobs', jobsRouter);
 app.use('/api/applications', appsRouter);
 app.use('/api/notifications', notifyRouter);
 
-// Root health check endpoint
-app.get('/', (req, res) => {
+// Root health check endpoint (API)
+app.get('/api', (req, res) => {
   res.json({ 
     status: 'online', 
     message: 'TalentHub Job Board API is operational! 🚀',
     developer: 'Suraj Kumar Prince'
   });
+});
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve frontend static files
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Handle React routing, return all unknown requests to React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 const PORT = process.env.PORT || 5000;

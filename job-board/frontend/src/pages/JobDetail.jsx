@@ -12,7 +12,7 @@ export default function JobDetail({ jobId, onNavigate, onOpenAuth }) {
     const fetchDetail = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/api/jobs/${jobId}`);
+        const res = await fetch(`/api/jobs/${jobId}`);
         if (res.ok) {
           const data = await res.json();
           setJob(data);
