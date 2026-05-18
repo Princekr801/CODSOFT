@@ -21,6 +21,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI
-        value: "mongodb+srv://admin:admin@cluster0.mongodb.net/quizcraft?retryWrites=true&w=majority"
+        sync: false
       - key: JWT_SECRET
-        value: "super_secret_quiz_jwt_key_2026"
+        sync: false
