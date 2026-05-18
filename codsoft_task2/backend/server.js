@@ -16,14 +16,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Fallback Data Stores (In-Memory)
+let isMongoConnected = false;
+let localUsers = [];
+let localQuizzes = [];
+
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/quizcraft';
-mongoose.connect(MONGODB_URI)
+
+mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 3000 })
   .then(() => {
+    isMongoConnected = true;
     console.log('Connected to MongoDB');
     seedDatabase();
   })
-  .catch(err => console.error('MongoDB connection error:', err));
+  .catch(err => {
+    console.log('MongoDB connection error or no URI provided. Switching to Local Fallback Database.');
+    seedLocalDatabase();
+  });
 
 // Schemas
 const userSchema = new mongoose.Schema({
@@ -51,7 +61,14 @@ const auth = async (req, res, next) => {
   try {
     const token = req.header('Authorization').replace('Bearer ', '');
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
-    const user = await User.findById(decoded.id);
+    
+    let user;
+    if (isMongoConnected) {
+      user = await User.findById(decoded.id);
+    } else {
+      user = localUsers.find(u => u._id === decoded.id);
+    }
+    
     if (!user) throw new Error();
     req.user = user;
     next();
@@ -64,15 +81,28 @@ const auth = async (req, res, next) => {
 app.post('/api/auth/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    const existing = await User.findOne({ email });
-    if (existing) return res.status(400).json({ error: 'Email already exists' });
     
-    const hashedPassword = await bcrypt.hash(password, 8);
-    const user = new User({ name, email, password: hashedPassword });
-    await user.save();
-    
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret');
-    res.status(201).json({ user: { id: user._id, name, email }, token });
+    if (isMongoConnected) {
+      const existing = await User.findOne({ email });
+      if (existing) return res.status(400).json({ error: 'Email already exists' });
+      
+      const hashedPassword = await bcrypt.hash(password, 8);
+      const user = new User({ name, email, password: hashedPassword });
+      await user.save();
+      
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret');
+      return res.status(201).json({ user: { id: user._id, name, email }, token });
+    } else {
+      const existing = localUsers.find(u => u.email === email);
+      if (existing) return res.status(400).json({ error: 'Email already exists' });
+      
+      const hashedPassword = await bcrypt.hash(password, 8);
+      const user = { _id: Date.now().toString(), name, email, password: hashedPassword };
+      localUsers.push(user);
+      
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret');
+      return res.status(201).json({ user: { id: user._id, name, email }, token });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -81,14 +111,26 @@ app.post('/api/auth/register', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ error: 'Invalid credentials' });
     
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
-    
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret');
-    res.status(200).json({ user: { id: user._id, name: user.name, email }, token });
+    if (isMongoConnected) {
+      const user = await User.findOne({ email });
+      if (!user) return res.status(400).json({ error: 'Invalid credentials' });
+      
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
+      
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret');
+      return res.status(200).json({ user: { id: user._id, name: user.name, email }, token });
+    } else {
+      const user = localUsers.find(u => u.email === email);
+      if (!user) return res.status(400).json({ error: 'Invalid credentials' });
+      
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
+      
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret');
+      return res.status(200).json({ user: { id: user._id, name: user.name, email }, token });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -100,8 +142,12 @@ app.get('/api/auth/me', auth, (req, res) => {
 
 app.get('/api/quizzes', async (req, res) => {
   try {
-    const quizzes = await Quiz.find();
-    res.json(quizzes);
+    if (isMongoConnected) {
+      const quizzes = await Quiz.find();
+      res.json(quizzes);
+    } else {
+      res.json(localQuizzes);
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -109,44 +155,57 @@ app.get('/api/quizzes', async (req, res) => {
 
 app.post('/api/quizzes', auth, async (req, res) => {
   try {
-    const quiz = new Quiz(req.body);
-    await quiz.save();
-    res.status(201).json(quiz);
+    if (isMongoConnected) {
+      const quiz = new Quiz(req.body);
+      await quiz.save();
+      res.status(201).json(quiz);
+    } else {
+      const quiz = { _id: Date.now().toString(), ...req.body };
+      localQuizzes.push(quiz);
+      res.status(201).json(quiz);
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Database Seeder
+const defaultQuizzes = [
+  {
+    title: 'Web Development Fundamentals', desc: 'Test your HTML, CSS & JS knowledge.',
+    category: 'Technology', author: 'QuizCraft Team',
+    questions: [
+      { text: 'What does HTML stand for?', options: ['HyperText Markup Language','HighTech Modern Language','HyperTransfer Markup Logic','HyperText Method Link'], correct: 0 },
+      { text: 'Which CSS property controls text size?', options: ['text-size','font-size','size','letter-size'], correct: 1 },
+      { text: 'What does DOM stand for?', options: ['Data Object Model','Document Object Model','Dynamic Output Model','Display Object Mode'], correct: 1 }
+    ]
+  },
+  {
+    title: 'World Geography Quiz', desc: 'Can you name the capitals and landmarks?',
+    category: 'Geography', author: 'GeoWhiz',
+    questions: [
+      { text: 'What is the capital of Australia?', options: ['Sydney','Melbourne','Canberra','Brisbane'], correct: 2 },
+      { text: 'Which country has the longest coastline?', options: ['Russia','USA','Canada','China'], correct: 2 }
+    ]
+  }
+];
+
+// Database Seeders
 async function seedDatabase() {
   try {
     const count = await Quiz.countDocuments();
     if (count === 0) {
-      console.log('Seeding default quizzes...');
-      const defaultQuizzes = [
-        {
-          title: 'Web Development Fundamentals', desc: 'Test your HTML, CSS & JS knowledge.',
-          category: 'Technology', author: 'QuizCraft Team',
-          questions: [
-            { text: 'What does HTML stand for?', options: ['HyperText Markup Language','HighTech Modern Language','HyperTransfer Markup Logic','HyperText Method Link'], correct: 0 },
-            { text: 'Which CSS property controls text size?', options: ['text-size','font-size','size','letter-size'], correct: 1 },
-            { text: 'What does DOM stand for?', options: ['Data Object Model','Document Object Model','Dynamic Output Model','Display Object Mode'], correct: 1 }
-          ]
-        },
-        {
-          title: 'World Geography Quiz', desc: 'Can you name the capitals and landmarks?',
-          category: 'Geography', author: 'GeoWhiz',
-          questions: [
-            { text: 'What is the capital of Australia?', options: ['Sydney','Melbourne','Canberra','Brisbane'], correct: 2 },
-            { text: 'Which country has the longest coastline?', options: ['Russia','USA','Canada','China'], correct: 2 }
-          ]
-        }
-      ];
+      console.log('Seeding default quizzes to MongoDB...');
       await Quiz.insertMany(defaultQuizzes);
-      console.log('Database seeded successfully.');
     }
   } catch (err) {
     console.error('Seeding error:', err);
+  }
+}
+
+function seedLocalDatabase() {
+  if (localQuizzes.length === 0) {
+    console.log('Seeding default quizzes to Local Array...');
+    localQuizzes = defaultQuizzes.map((q, i) => ({ _id: `default_${i}`, ...q }));
   }
 }
 
