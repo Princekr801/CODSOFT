@@ -192,7 +192,7 @@ export default function Apply({ jobId, onNavigate }) {
               <div className="form-group">
                 <label>LinkedIn URL</label>
                 <input 
-                  type="url" 
+                  type="text" 
                   placeholder="linkedin.com/in/..." 
                   value={linkedin}
                   onChange={e => setLinkedin(e.target.value)}
@@ -202,7 +202,7 @@ export default function Apply({ jobId, onNavigate }) {
             <div className="form-group">
               <label>Portfolio / Website</label>
               <input 
-                type="url" 
+                type="text" 
                 placeholder="yourportfolio.com" 
                 value={portfolio}
                 onChange={e => setPortfolio(e.target.value)}
