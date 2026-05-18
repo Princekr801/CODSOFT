@@ -3,7 +3,7 @@ services:
     name: talenthub-job-board
     env: node
     plan: free
-    rootDir: job-board
+    rootDir: codsoft_task1
     buildCommand: npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend
     startCommand: npm start --prefix backend
     envVars:
@@ -14,7 +14,7 @@ services:
     name: quizcraft-maker
     env: node
     plan: free
-    rootDir: quiz-maker
+    rootDir: codsoft_task2
     buildCommand: npm install --prefix backend
     startCommand: npm start --prefix backend
     envVars:

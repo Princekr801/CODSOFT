@@ -29,7 +29,7 @@ Built with a stunning dark-themed glassmorphic UI, it features role-based access
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/Princekr801/CODSOFT.git
-   cd CODSOFT/job-board
+   cd CODSOFT/codsoft_task1
    ```
 
 2. **Install all dependencies** (installs root, frontend, and backend packages):
@@ -50,11 +50,11 @@ Built with a stunning dark-themed glassmorphic UI, it features role-based access
 
 #### 1. TalentHub (Job Board)
 - **Live Demo**: [https://talenthub-job-board.onrender.com](https://talenthub-job-board.onrender.com)
-- **Repository Code**: [`/job-board`](./job-board)
+- **Repository Code**: [`/codsoft_task1`](./codsoft_task1)
 
 #### 2. QuizCraft (Online Quiz Maker)
 - **Live Demo**: [https://quizcraft-maker.onrender.com](https://quizcraft-maker.onrender.com)
-- **Repository Code**: [`/quiz-maker`](./quiz-maker)
+- **Repository Code**: [`/codsoft_task2`](./codsoft_task2)
 
 This project repository is configured as a Monorepo for **Render**, ensuring automated and seamless deployments.
 
@@ -80,7 +80,7 @@ This project repository is configured as a Monorepo for **Render**, ensuring aut
 
 1. **Navigate to the quiz-maker directory:**
    ```bash
-   cd CODSOFT/quiz-maker
+   cd CODSOFT/codsoft_task2
    ```
 2. **Install backend dependencies:**
    ```bash
