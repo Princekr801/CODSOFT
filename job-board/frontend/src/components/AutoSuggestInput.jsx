@@ -24,7 +24,13 @@ export default function AutoSuggestInput({ value, onChange, onKeyDown, placehold
   };
 
   return (
-    <div className="autosuggest-wrapper" ref={wrapperRef} style={style}>
+    <div 
+      className="autosuggest-wrapper" 
+      ref={wrapperRef} 
+      style={style}
+      onMouseEnter={() => setShowSuggestions(true)}
+      onMouseLeave={() => setShowSuggestions(false)}
+    >
       <input
         type="text"
         id={id}
