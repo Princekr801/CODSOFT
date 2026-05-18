@@ -9,3 +9,18 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+
+  - type: web
+    name: quizcraft-maker
+    env: node
+    plan: free
+    rootDir: quiz-maker
+    buildCommand: npm install --prefix backend
+    startCommand: npm start --prefix backend
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        value: "mongodb+srv://admin:admin@cluster0.mongodb.net/quizcraft?retryWrites=true&w=majority"
+      - key: JWT_SECRET
+        value: "super_secret_quiz_jwt_key_2026"
