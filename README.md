@@ -46,15 +46,17 @@ Built with a stunning dark-themed glassmorphic UI, it features role-based access
    Open [http://localhost:5173](http://localhost:5173) in your browser. 
    *(Note: The backend runs on port 5000 and the React app automatically proxies `/api` requests to it.)*
 
-### 🚀 Live Deployments
+### 🚀 Project Links
 
-- **Job Board (TalentHub)**: [https://talenthub-job-board.onrender.com](https://talenthub-job-board.onrender.com)
-- **Quiz Maker (QuizCraft)**: [https://quizcraft-maker.onrender.com](https://quizcraft-maker.onrender.com)
+#### 1. TalentHub (Job Board)
+- **Live Demo**: [https://talenthub-job-board.onrender.com](https://talenthub-job-board.onrender.com)
+- **Repository Code**: [`/job-board`](./job-board)
 
-This project repository is configured as a Monorepo for **Render**. 
-1. Go to [Render.com](https://render.com/).
-2. Create a **New Blueprint Instance**.
-3. Connect this GitHub repository. Render will automatically read the `render.yaml` file and deploy **both** the Job Board and the Quiz Maker as fully functional web services!
+#### 2. QuizCraft (Online Quiz Maker)
+- **Live Demo**: [https://quizcraft-maker.onrender.com](https://quizcraft-maker.onrender.com)
+- **Repository Code**: [`/quiz-maker`](./quiz-maker)
+
+This project repository is configured as a Monorepo for **Render**, ensuring automated and seamless deployments.
 
 ---
 
