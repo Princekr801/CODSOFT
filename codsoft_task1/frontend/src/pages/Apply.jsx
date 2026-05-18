@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { toast } from '../utils/toast';
 
 export default function Apply({ jobId, onNavigate }) {
   const { user, token } = useAuth();
@@ -53,7 +54,7 @@ export default function Apply({ jobId, onNavigate }) {
     e.preventDefault();
     
     if (!resumeName) {
-      alert('Please attach your resume to complete the application process!');
+      toast('Please attach your resume to complete the application process!', 'error');
       return;
     }
 
@@ -83,14 +84,14 @@ export default function Apply({ jobId, onNavigate }) {
       const data = await res.json();
 
       if (res.ok) {
-        alert('🎉 Application submitted successfully! Good luck!\n\nYou\'ll receive a confirmation email shortly.');
+        toast('🎉 Application submitted successfully! Good luck!\n\nYou\'ll receive a confirmation email shortly.', 'success');
         onNavigate('candidate-dash');
       } else {
-        alert(data.msg || 'Failed to submit application.');
+        toast(data.msg || 'Failed to submit application.', 'error');
       }
     } catch (err) {
       console.error(err);
-      alert('A connection error occurred during submission.');
+      toast('A connection error occurred during submission.', 'error');
     } finally {
       setIsSubmitting(false);
     }

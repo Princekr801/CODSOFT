@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { toast } from '../utils/toast';
 
 export default function AuthModal({ isOpen, onClose }) {
   const { login, register } = useAuth();
@@ -28,7 +29,7 @@ export default function AuthModal({ isOpen, onClose }) {
         if (result.success) {
           onClose();
           resetForm();
-          alert(`Welcome back to TalentHub! 👋`);
+          toast(`Welcome back to TalentHub! 👋`, 'success');
         } else {
           setError(result.error);
         }
@@ -43,7 +44,7 @@ export default function AuthModal({ isOpen, onClose }) {
         if (result.success) {
           onClose();
           resetForm();
-          alert(`Welcome to TalentHub! 👋 Account created successfully.`);
+          toast(`Welcome to TalentHub! 👋 Account created successfully.`, 'success');
         } else {
           setError(result.error);
         }
@@ -189,7 +190,7 @@ export default function AuthModal({ isOpen, onClose }) {
         <button 
           className="btn btn-ghost" 
           style={{ width: '100%', padding: '12px' }}
-          onClick={() => alert('OAuth setup simulated!')}
+          onClick={() => toast('OAuth setup simulated!', 'info')}
         >
           🔗 Continue with Google
         </button>
