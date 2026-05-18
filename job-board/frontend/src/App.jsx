@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import AuthModal from './components/AuthModal';
+import Footer from './components/Footer';
 
 // Pages
 import Home from './pages/Home';
@@ -92,6 +93,8 @@ export default function App() {
           />
         )}
       </main>
+
+      <Footer />
 
       <AuthModal 
         isOpen={isAuthOpen} 

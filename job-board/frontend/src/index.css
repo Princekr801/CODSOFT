@@ -240,6 +240,25 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 2rem;height:64px;d
 .autosuggest-dropdown li:last-child { border-bottom: none; }
 .autosuggest-dropdown li:hover { background: var(--surface); color: var(--accent); }
 
+/* FOOTER */
+.footer-container {
+  background: var(--bg2); border-top: 1px solid var(--border); padding: 4rem 2rem 1.5rem; margin-top: 4rem;
+}
+.footer-content {
+  max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 4rem; justify-content: space-between;
+}
+.footer-brand { max-width: 300px; }
+.footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; color: var(--text); }
+.footer-logo span { color: var(--accent); }
+.footer-tagline { color: var(--text2); font-size: 0.9rem; line-height: 1.6; }
+.footer-links-group { display: flex; flex-direction: column; gap: 0.75rem; }
+.footer-links-group h4 { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+.footer-links-group a { color: var(--text2); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+.footer-links-group a:hover { color: var(--accent); }
+.footer-bottom {
+  max-width: 1200px; margin: 3rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--border2); text-align: center; color: var(--text3); font-size: 0.8rem;
+}
+
 @media(max-width:768px){
   .hero h1{font-size:2.2rem}
   .listings-layout{flex-direction:column}
