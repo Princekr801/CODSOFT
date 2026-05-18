@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from '../utils/toast';
 import { useAuth } from '../context/AuthContext';
 
 export default function Navbar({ activePage, onNavigate, onOpenAuth }) {
@@ -9,7 +10,7 @@ export default function Navbar({ activePage, onNavigate, onOpenAuth }) {
       if (user.role === 'employer') {
         onNavigate('employer-dash');
       } else {
-        alert('Your account is registered as a Job Seeker. Please log in with an Employer account to access the recruiter dashboard.');
+        toast('Your account is registered as a Job Seeker. Please log in with an Employer account to access the recruiter dashboard.', "info");
       }
     } else {
       onOpenAuth();

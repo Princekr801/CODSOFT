@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from '../utils/toast';
 import { useAuth } from '../context/AuthContext';
 
 export default function CandidateDashboard({ onNavigate }) {
@@ -106,7 +107,7 @@ export default function CandidateDashboard({ onNavigate }) {
     
     setSavingProfile(false);
     if (result.success) {
-      alert('Profile updated successfully! 💾');
+      toast('Profile updated successfully! 💾', "info");
     } else {
       alert(result.error || 'Failed to update profile.');
     }
@@ -176,7 +177,7 @@ export default function CandidateDashboard({ onNavigate }) {
                 </div>
                 <button 
                   className="btn btn-primary btn-sm"
-                  onClick={() => alert('Confirmation simulated! 📅')}
+                  onClick={() => toast('Confirmation simulated! 📅', "info")}
                 >
                   Confirm Receipt
                 </button>
@@ -279,7 +280,7 @@ export default function CandidateDashboard({ onNavigate }) {
                   <button 
                     type="button" 
                     className="btn btn-ghost btn-sm"
-                    onClick={() => alert('Photo upload simulated!')}
+                    onClick={() => toast('Photo upload simulated!', "info")}
                   >
                     Change Photo
                   </button>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from '../utils/toast';
 import { useAuth } from '../context/AuthContext';
 
 export default function EmployerDashboard({ onNavigate }) {
@@ -62,7 +63,7 @@ export default function EmployerDashboard({ onNavigate }) {
     e.preventDefault();
     
     if (!jobTitle || !minSalary || !maxSalary || !description || !deadline) {
-      alert('Please fill out all mandatory job post fields!');
+      toast('Please fill out all mandatory job post fields!', "info");
       return;
     }
 
@@ -95,7 +96,7 @@ export default function EmployerDashboard({ onNavigate }) {
       const data = await res.json();
 
       if (res.ok) {
-        alert('🎉 Job posted successfully! Added to listings.');
+        toast('🎉 Job posted successfully! Added to listings.', "info");
         
         // Reset form
         setJobTitle('');
@@ -114,7 +115,7 @@ export default function EmployerDashboard({ onNavigate }) {
       }
     } catch (err) {
       console.error(err);
-      alert('Connection error occurred while posting job.');
+      toast('Connection error occurred while posting job.', "info");
     } finally {
       setIsPosting(false);
     }
@@ -132,7 +133,7 @@ export default function EmployerDashboard({ onNavigate }) {
       });
 
       if (res.ok) {
-        alert(`Application status advanced to: ${newStatus}! Seeker notified.`);
+        toast(`Application status advanced to: ${newStatus}! Seeker notified.`, "info");
         fetchEmployerData(); // reload
       } else {
         const errData = await res.json();
@@ -140,7 +141,7 @@ export default function EmployerDashboard({ onNavigate }) {
       }
     } catch (err) {
       console.error(err);
-      alert('Connection error occurred during updating status.');
+      toast('Connection error occurred during updating status.', "info");
     }
   };
 
@@ -495,7 +496,7 @@ export default function EmployerDashboard({ onNavigate }) {
                         <span 
                           className="skill-tag" 
                           style={{ borderColor: 'var(--teal)', color: 'var(--teal)', cursor: 'pointer' }}
-                          onClick={() => alert('Opening simulated resume download file!')}
+                          onClick={() => toast('Opening simulated resume download file!', "info")}
                         >
                           📄 Download Resume
                         </span>

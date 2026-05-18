@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from '../utils/toast';
 import { useAuth } from '../context/AuthContext';
 
 export default function JobDetail({ jobId, onNavigate, onOpenAuth }) {
@@ -33,7 +34,7 @@ export default function JobDetail({ jobId, onNavigate, onOpenAuth }) {
     }
     
     if (user.role === 'employer') {
-      alert('Recruiters cannot apply for jobs. Please log in with a Job Seeker account.');
+      toast('Recruiters cannot apply for jobs. Please log in with a Job Seeker account.', "info");
       return;
     }
     

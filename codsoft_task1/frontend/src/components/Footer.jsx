@@ -1,9 +1,10 @@
 import React from 'react';
+import { toast } from '../utils/toast';
 
 export default function Footer() {
   const handleFeatureClick = (e) => {
     e.preventDefault();
-    alert('Thank you for your interest! This feature will be available in the next release.');
+    toast('Thank you for your interest! This feature will be available in the next release.', "info");
   };
 
   return (
